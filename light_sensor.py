@@ -16,7 +16,7 @@ try:
     pulse_end_time1 = 0
     pulse_start_time2 = 0
     pulse_end_time2 = 0
-    
+    light_on = 0; #if light_on = 1, green light is on, if it =0, red light is on
     #sets the trigger pin to be output and echo pin to be input
     GPIO.setup(PIN_TRIGGER, GPIO.OUT)
     GPIO.setup(PIN_ECHO, GPIO.IN)
@@ -38,13 +38,13 @@ try:
     while True:
         
         #set amount of measurements pr. second by sleeping in a set time.
-        time.sleep(0.5)
+        time.sleep(0.25)
         
         #sends out 8-pulse patterns at 40KHz, which will be reffered to as a signal
         GPIO.output(PIN_TRIGGER, GPIO.HIGH)
         
         #trigger needs a pulse of at least 10 microseconds to start sending a signal.
-        #sleep script so that the signal does start the trigger
+        #sleep script so that the current lasts long enough so  start the trigger
         time.sleep(0.00001)
         
         #stops sending out a signal
@@ -63,16 +63,19 @@ try:
         distance = round(pulse_duration * 17150,2) #distance in cm
         print("Distance: " ,distance, " cm")
         
+        
+        
         #turns on or off lights on conditions
-        if(distance<10):
-            led_green.on()
+        if(distance<120 and light_on==0):
+            light_on+=1
             led_red.off()
-        else:
-            led_red.on()
+            led_green.on()
+        elif (distance<120 and light_on==1):
+            light_on-=1
             led_green.off()
+            led_red.on()
+            
         
 #end of try statement and ensures pins and such are reset for use in other programs, and turns off lights
 finally:
     GPIO.cleanup()
-    led_green.off()
-    led_red.off()
