@@ -38,14 +38,14 @@ try:
     while True:
         
         #set amount of measurements pr. second by sleeping in a set time.
-        time.sleep(0.25)
+        time.sleep(0.01)
         
         #sends out 8-pulse patterns at 40KHz, which will be reffered to as a signal
         GPIO.output(PIN_TRIGGER, GPIO.HIGH)
         
         #trigger needs a pulse of at least 10 microseconds to start sending a signal.
         #sleep script so that the current lasts long enough so  start the trigger
-        time.sleep(0.00001)
+        time.sleep(0.0001)
         
         #stops sending out a signal
         GPIO.output(PIN_TRIGGER, GPIO.LOW)
@@ -70,7 +70,7 @@ try:
             light_on+=1
             led_red.off()
             led_green.on()
-        elif (distance<120 and light_on==1):
+        elif(distance<120 and light_on==1):
             light_on-=1
             led_green.off()
             led_red.on()
